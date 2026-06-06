@@ -1,7 +1,9 @@
 package com.example.demo.security;
 
 import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.crypto.ECDSAVerifier;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
+import com.nimbusds.jose.jwk.ECKey;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -55,8 +57,11 @@ public class JwtVerification {
             throw new SecurityException("Нет ключа верификации");
         }
 
-        RSAKey rsaKey = jwk.toRSAKey();
-        JWSVerifier verifier = new RSASSAVerifier(rsaKey);
+        JWSVerifier verifier = switch (jwk) {
+            case RSAKey rsaKey -> new RSASSAVerifier(rsaKey);
+            case ECKey ecKey -> new ECDSAVerifier(ecKey);
+            default -> throw new SecurityException("Неподдерживаемый тип ключа JWK: " + jwk.getKeyType());
+        };
         if (!signedJWT.verify(verifier)) {
             throw new SecurityException("Неверная подпись");
         }
