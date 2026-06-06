@@ -26,6 +26,7 @@ public class EventParticipants {
     private User user;
 
     @Column(name = "status", nullable = false, columnDefinition = "TEXT")
+    @Enumerated(EnumType.STRING)
     private ParticipationStatus status;
 
     @ManyToOne

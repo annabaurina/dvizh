@@ -53,6 +53,7 @@ public class Event {
     private int maxParticipants;
 
     @Column(name = "status", nullable = false, columnDefinition = "TEXT")
+    @Enumerated(EnumType.STRING)
     private EventStatus status;
 
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMPTZ")

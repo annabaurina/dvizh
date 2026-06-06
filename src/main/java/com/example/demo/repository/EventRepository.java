@@ -20,7 +20,7 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
 
     @Query("""
             SELECT new com.example.demo.dto.MyCreatedEventItem(
-                e.id, e.title, e.status.name(), e.createdAt)
+                e.id, e.title, str(e.status), e.createdAt)
             FROM Event e
             WHERE e.creator.id = :userId
             """)

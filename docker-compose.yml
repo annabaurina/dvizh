@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: dvizh-postgres
+    environment:
+      POSTGRES_USER: dvizh
+      POSTGRES_PASSWORD: dvizh
+      POSTGRES_DB: events
+    ports:
+      - "5433:5432"
+    volumes:
+      - dvizh-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  dvizh-postgres-data:
