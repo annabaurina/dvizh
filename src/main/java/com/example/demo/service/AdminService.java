@@ -193,7 +193,7 @@ public class AdminService { // admin service
     // resolve participation reward
     private static int resolveParticipationReward(ConfirmAttendanceRequest request) {
         if (request == null) {
-            return 0;
+            return ConfirmAttendanceRequest.DEFAULT_REWARD_AMOUNT;
         }
         return request.resolvedRewardAmount();
     }

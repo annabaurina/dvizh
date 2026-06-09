@@ -2,6 +2,8 @@ package com.example.demo.integration;
 
 import com.example.demo.config.AchievementDefinitions;
 import com.example.demo.dto.ConfirmAttendanceRequest;
+
+import static com.example.demo.dto.ConfirmAttendanceRequest.DEFAULT_REWARD_AMOUNT;
 import com.example.demo.dto.CreateEventRequest;
 import com.example.demo.dto.CreateEventResponse;
 import com.example.demo.config.AchievementDefinitions.Entry;
@@ -124,16 +126,19 @@ public class IntegrationFlowChecks {
         assertEquals(EventStatus.approved.name(), myEvent.status(), "getMyEvents event status");
         assertEquals(ParticipationStatus.registered.name(), myEvent.participationStatus(), "getMyEvents participation");
 
+        // signup alone must not grant attendance achievement
+        assertMyAchievementsExactly(student, List.of(AchievementDefinitions.FIRST_CREATED_EVENT),
+                "after signup, before admin confirms attendance");
+
         // confirmAttendance
         int balanceBeforeAttendance = userRepository.findById(student.getId()).orElseThrow().getBalance();
-        int attendanceReward = 5;
         int expectedAttendanceAchievementReward = AchievementDefinitions.FIRST_ATTENDANCE.rewardAmount();
 
         var attendanceResponse = adminService.confirmAttendance(
                 approveEventId,
                 student.getId(),
                 admin.getAuthId(),
-                new ConfirmAttendanceRequest(attendanceReward)
+                null
         );
         assertEquals(approveEventId, attendanceResponse.eventId(), "attendance response event_id");
         assertEquals(student.getId(), attendanceResponse.userId(), "attendance response user_id");
@@ -142,7 +147,7 @@ public class IntegrationFlowChecks {
             throw fail("attendance response attended_at must be set");
         }
 
-        int expectedBalanceAfter = balanceBeforeAttendance + attendanceReward + expectedAttendanceAchievementReward;
+        int expectedBalanceAfter = balanceBeforeAttendance + DEFAULT_REWARD_AMOUNT + expectedAttendanceAchievementReward;
         User studentAfter = userRepository.findById(student.getId()).orElseThrow();
         if (studentAfter.getBalance() != expectedBalanceAfter) {
             throw fail("student balance after attendance: expected "
@@ -192,7 +197,7 @@ public class IntegrationFlowChecks {
                     eventId,
                     student.getId(),
                     admin.getAuthId(),
-                    new ConfirmAttendanceRequest(1)
+                    null
             );
 
             if (attendanceNumber < 5) {
