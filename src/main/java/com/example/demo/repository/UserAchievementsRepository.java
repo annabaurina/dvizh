@@ -29,4 +29,6 @@ public interface UserAchievementsRepository extends JpaRepository<UserAchievemen
             @Param("userId") UUID userId,
             @Param("achievementId") UUID achievementId
     );
+
+    long countByUser_Id(UUID userId);
 }

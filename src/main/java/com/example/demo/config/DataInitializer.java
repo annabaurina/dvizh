@@ -4,6 +4,7 @@ import com.example.demo.entity.User;
 import com.example.demo.enums.Role;
 import com.example.demo.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
  * заменить на реальный sub (UUID) конкретного пользователя из Supabase.
  */
 @Component
+@Order(1)
 public class DataInitializer implements CommandLineRunner {
 
     // TODO: заменить на реальный auth_id (sub из Supabase) того, кто должен быть админом.

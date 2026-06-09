@@ -4,12 +4,14 @@ import com.example.demo.entity.Category;
 import com.example.demo.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.List;
 
 @Component
+@Order(2)
 public class CategoryInitializer implements CommandLineRunner {
 
     @Autowired
